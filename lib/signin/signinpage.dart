@@ -1,9 +1,5 @@
 import 'package:app_shopping/signin/components/body.dart';
 import 'package:flutter/material.dart';
-
-
-
-
 class SignInPage extends StatelessWidget {
   static String routeName = "/sign_in";
 

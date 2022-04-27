@@ -37,6 +37,8 @@ dependencies:
   quiver: ^3.0.1+1
   convert: ^3.0.1
   http: ^0.13.4
+  api_cache_manager: ^1.0.2
+  snippet_coder_utils: ^1.0.9
 
 dev_dependencies:
   flutter_test:

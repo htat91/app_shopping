@@ -1,12 +1,18 @@
 import 'package:app_shopping/homepage/homepage.dart';
+import 'package:app_shopping/model/login_response_model.dart';
 import 'package:app_shopping/model/user.dart';
+import 'package:app_shopping/services/shared_service.dart';
+import 'package:app_shopping/signup/signuppage.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:snippet_coder_utils/FormHelper.dart';
+import 'package:snippet_coder_utils/ProgressHUD.dart';
+import 'package:snippet_coder_utils/hex_color.dart';
 
-
-
-
-
+import '../../config.dart';
+import '../../model/login_request_model.dart';
+import '../../services/api_service.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({Key? key}) : super(key: key);
@@ -16,199 +22,270 @@ class SignInForm extends StatefulWidget {
 }
 
 class _SignInFormState extends State<SignInForm> {
-
-  final _formKey = GlobalKey<FormState>();
-  bool _value = false;
-
-  var prefs;
-  final username = TextEditingController();
-  final password = TextEditingController();
-
-  _getData() async {
-    // prefs = await SharedPreferences.getInstance();
-    if(!prefs.getString('username').isEmpty){
-      username.text = prefs.getString('username');
-      password.text = prefs.getString('password');
-      _value = prefs.getBool('check');
-      //print(_value.toString());
-    }
-  }
-
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-
-    _getData();
-  }
+  bool isAPIcallProcess = false;
+  bool hidePassword = true;
+  GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
+  String? username;
+  String? password;
 
   @override
   Widget build(BuildContext context) {
-
-    return Form(
-      key: _formKey,
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-
-        child: Column(
-          children: [
-            Container(
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(8),
-                alignment: Alignment.center,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Text("Food Now", style: TextStyle(fontSize: 32, color: Colors.green, fontWeight: FontWeight.bold),),
-                    Text(
-                      "Sign in with your email and password  \nor continue with social media",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.green),
-
-                    ),
-                  ],
-                )),
-
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextFormField(
-                      validator: (value){
-
-                      },
-                      onSaved: (_value){
-                        setState(() {
-
-                        });
-                      },
-                      controller: username,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: "Username",
-                          prefixIcon: Icon(Icons.mail_outline)
-                      ),),
-                    const SizedBox(height: 5,),
-                    TextFormField(
-                      controller: password,
-                      validator: (value){
-
-                      },
-                      keyboardType: TextInputType.number,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: "Password",
-                          prefixIcon: Icon(Icons.lock_outline_rounded)
-                      ),),
-                    const SizedBox(height: 5,),
-                    // Row(
-                    //   children: [
-                    //     Checkbox(value: _value?? : true, onChanged: (value)  {
-                    //       print(_value.toString());
-                    //       setState((){
-                    //         _value = value;
-                    //       });
-                    //     }),
-                    //     Text("Remember me", style: TextStyle(fontSize: 16, color: Colors.green),)
-                    //   ],
-                    // ),
-                    const SizedBox(height: 5,),
-                    SizedBox(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      child: RaisedButton(
-                        onPressed: () async {
-                          // if(_value){
-                          //   // obtain shared preferences
-                          //   // prefs = await SharedPreferences.getInstance();
-                          //   prefs.setString('username', username.text);
-                          //   prefs.setString('password', password.text);
-                          //   prefs.setBool('check', _value);
-
-                          // }else{
-                          //   prefs.remove('check');
-                          // }
-
-                          Navigator.pushNamed(context, HomePage.routeName);
-
-                          },
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        color: Colors.green,
-                        child: const Text("Continue", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),),),
-
-                    ),
-                    const SizedBox(height: 5),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 40,
-                            width: 40,
-                            padding: const EdgeInsets.all(10),
-                            decoration: const BoxDecoration(
-                                color: Color(0xFFF5F6F9),
-                                shape: BoxShape.circle
-                            ),
-                            child: SvgPicture.asset("assets/icons/facebook-2.svg"),
-                          ),
-                          Container(
-                            height: 40,
-                            width: 40,
-                            margin: const EdgeInsets.only(left: 10, right: 10),
-                            padding: const EdgeInsets.all(10),
-                            decoration: const BoxDecoration(
-                                color: Color(0xFFF5F6F9),
-                                shape: BoxShape.circle
-                            ),
-                            child: SvgPicture.asset("assets/icons/google-icon.svg"),
-                          ),
-                          Container(
-                            height: 40,
-                            width: 40,
-                            padding: const EdgeInsets.all(10),
-                            decoration: const BoxDecoration(
-                                color: Color(0xFFF5F6F9),
-                                shape: BoxShape.circle
-                            ),
-                            child: SvgPicture.asset("assets/icons/twitter.svg"),
-                          )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 5,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text("Don't have an account ? ", style: TextStyle(color: Colors.green, fontSize: 14),),
-                        GestureDetector(
-                            onTap: () async {
-                              // final result = await Navigator.pushNamed(context, SignUpPage.routeName);
-                              // User user = result as User;
-                              // username.text = user.username! ;
-
-                            },
-                            child: const Text(" Sign Up", style: TextStyle(color: Colors.redAccent, fontSize: 14), ))
-
-                      ],
-                    )
-
-                  ],
-                ),
-              ),
-            ),
-
-          ],
-        ),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: HexColor("#283B71"),
+        body: ProgressHUD(
+          child: Form(
+            key: globalFormKey,
+            child: _loginUI(context),
+          ),
+          inAsyncCall: isAPIcallProcess,
+          opacity: 0.3,
+          key: UniqueKey(), 
+        ), 
       ),
     );
   }
+
+  Widget _loginUI(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height / 4,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.white,
+                  Colors.white,
+                ]
+              ),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(100),
+                bottomRight: Radius.circular(100)
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    "assets/images/ShoppingAppLogo.png",
+                    width: 250,
+                    fit: BoxFit.contain,
+                  ),
+                )
+              ],
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(
+              left: 20,
+              bottom: 30,
+              top: 50
+            ),
+            child: Text(
+              "Login", 
+              style: TextStyle(
+                fontWeight: FontWeight.bold, 
+                fontSize: 25, 
+                color: Colors.white
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 10),
+            child: FormHelper.inputFieldWidget(
+              context,
+              "username", 
+              "UserName",               
+              (onValidateVal) {
+                if(onValidateVal.isEmpty) {
+                  return "Username can\'t be empty.";
+                }
+                return null;
+              }, 
+              (onSavedVal) {
+                username = onSavedVal; 
+              },
+              prefixIcon: Icon(Icons.person),
+              prefixIconPaddingLeft: 10,
+              borderFocusColor: Colors.white,         
+              prefixIconColor: Colors.white,
+              borderColor: Colors.white,
+              showPrefixIcon: true,
+              textColor: Colors.white,
+              hintColor: Colors.white.withOpacity(0.7),
+              borderRadius: 10,
+              textInputAction: TextInputAction.next),             
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: FormHelper.inputFieldWidget(
+                context,
+                "password", 
+                "PassWord", 
+                (onValidateVal) {
+                  if(onValidateVal.isEmpty) {
+                    return "Password can\'t be empty.";
+                  }
+                  return null;
+                }, 
+                (onSavedVal) {
+                  password = onSavedVal; 
+                },
+                prefixIcon: Icon(Icons.lock),
+                prefixIconPaddingLeft: 10,
+                borderFocusColor: Colors.white,         
+                prefixIconColor: Colors.white,
+                borderColor: Colors.white,
+                showPrefixIcon: true,
+                textColor: Colors.white,
+                hintColor: Colors.white.withOpacity(0.7),
+                borderRadius: 10,
+                obscureText: hidePassword,
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      hidePassword = !hidePassword;
+                    });
+                  },
+                  color: Colors.white.withOpacity(0.7),
+                  icon: Icon(
+                    hidePassword ? Icons.visibility_off : Icons.visibility,
+                  ),
+                ),
+                textInputAction: TextInputAction.done,
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 25, top: 10),
+                child: RichText(
+                  text: TextSpan(
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14.0,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: 'Forget Password ?',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()..onTap = () {
+                          print("Forget Password");
+                        }
+                      )
+                    ]
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Center(
+              child: FormHelper.submitButton("Login", () {
+                if(validateAndSave()) {                 
+                  setState(() {
+                    isAPIcallProcess = true;
+                  });
+                  LoginRequestModel model = LoginRequestModel(
+                    username: username!, 
+                    password: password!);                  
+                  APIService.login(model).then((response) async {                   
+                    setState(() {
+                      isAPIcallProcess = false;
+                    });                   
+
+                    if (response.resultObj != null) {                      
+                      Navigator.pushNamedAndRemoveUntil(
+                        context, 
+                        HomePage.routeName, 
+                        (route) => false);
+                    }
+                    else {
+                      FormHelper.showSimpleAlertDialog(
+                        context, 
+                        Config.appName, 
+                        response.message!, 
+                        "OK", 
+                        () {
+                          Navigator.pop(context);
+                        });
+                    }
+                  });
+                }
+              },
+              btnColor: HexColor("#283B71"),
+              borderColor: Colors.white,
+              txtColor: Colors.white,
+              borderRadius: 10),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Center(
+              child: Text(
+                "OR",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.white
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 25, top: 10),
+                child: RichText(
+                  text: TextSpan(
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14.0,
+                    ),
+                    children: <TextSpan>[
+                      const TextSpan(text: "Don\'t have an account? "),
+                      TextSpan(
+                        text: 'Sign up',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()..onTap = () {
+                          Navigator.pushNamed(context, SignUpPage.routeName);
+                        }
+                      )
+                    ]
+                  ),
+                ),
+              ),
+            ),
+        ],
+      )
+    );
+  }
+
+  bool validateAndSave() {
+    final form = globalFormKey.currentState;
+    if (form!.validate()) {
+      form.save();
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
 }
-
-

@@ -6,25 +6,25 @@ import 'package:http/http.dart' as http ;
 import 'package:quiver/strings.dart';
 
 class Utilities {
-  String url = 'http://192.168.0.100:3000/api/food';
+  // String url = 'http://192.168.0.100:3000/api/food';
 
   static List<Products> data = [];
 
-  Future<List<Products>> getProducts() async{
-    var res = await http.get(Uri.parse(url));
-    if (res.statusCode == 200) {
-      var content = res.body;
-      print(content.toString());
-      var arr = json.decode(content)['food'] as List;
+  // Future<List<Products>> getProducts() async{
+  //   var res = await http.get(Uri.parse(url));
+  //   if (res.statusCode == 200) {
+  //     var content = res.body;
+  //     print(content.toString());
+  //     var arr = json.decode(content)['food'] as List;
 
-      // for every element of arr map to _fromJson
-      // and convert the array to list
+  //     // for every element of arr map to _fromJson
+  //     // and convert the array to list
 
-      // return arr.map((e) => _fromJson(e)).toList();
-    }
+  //     // return arr.map((e) => _fromJson(e)).toList();
+  //   }
 
-    return <Products>[];
-  }
+  //   return <Products>[];
+  // }
 
   // Products _fromJson(Map<String, dynamic> item) {
   //   return new Products(
@@ -37,30 +37,30 @@ class Utilities {
 
   static String? validateEmail(String value) {
     if (value.isEmpty) {
-      return 'Please enter mail';
+      return 'Email không được để trống';
     }
     const pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regex = new RegExp(pattern);
     if (!regex.hasMatch(value))
-      return 'Enter Valid Email';
+      return 'Bạn đã nhập sai định dạng email. Vui lòng nhập lại';
     else
       return null;
   }
 
   static String? validatePassword(String value){
     if(value.isEmpty){
-      return 'Please enter password';
+      return 'Mật khẩu không được để trống';
     }
     if(value.length < 8){
-      return 'Password should be more than 8 characters ';
+      return 'Mật khẩu tối thiểu 8 ký tự';
     }
     return null;
   }
 
-  static String? conformPassword(String value, String value2){
+  static String? confirmPassword(String value, String value2){
     if(!equalsIgnoreCase(value, value2))
-      return "Conform password invalid";
+      return "Mật khẩu xác nhận không trùng khớp";
     return null;
   }
 

@@ -1,9 +1,21 @@
 
-import 'package:app_shopping/routes.dart';
+import 'dart:io';
+
+import 'package:app_shopping/model/routes.dart';
+import 'package:app_shopping/services/shared_service.dart';
 import 'package:app_shopping/signin/signinpage.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+import 'homepage/homepage.dart';
+
+Widget _defaultHome = const SignInPage();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  bool _result = await SharedService.isLoggedIn();
+  if (_result) {
+    _defaultHome = HomePage();
+  }
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
@@ -27,9 +39,17 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const SignInPage(),
+      home: _defaultHome,
       routes: routes,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
 
+ class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+  }
+}

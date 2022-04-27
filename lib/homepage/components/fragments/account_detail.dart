@@ -1,4 +1,7 @@
+import 'package:app_shopping/services/api_service.dart';
 import 'package:flutter/material.dart';
+
+import '../../../services/shared_service.dart';
 
 
 
@@ -12,6 +15,24 @@ class AccountDetail extends StatefulWidget {
 
 class _AccountDetailState extends State<AccountDetail> {
   final email = TextEditingController();
+  final name = TextEditingController();
+  final phone = TextEditingController();
+  final address = TextEditingController();
+  // LoginResponseModel? model;
+  @override
+  void initState() {
+    super.initState();
+    _getData();    
+  }
+  _getData() async {
+    // model = await SharedService.loginDetails();
+    // email.text = model!.name;
+    var model = await APIService.getUserProfile();
+    email.text = model.resultObj.email;
+    name.text = model.resultObj.name;
+    phone.text = model.resultObj.phoneNumber;
+    address.text = model.resultObj.address;
+  }
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -30,7 +51,7 @@ class _AccountDetailState extends State<AccountDetail> {
             const SizedBox(height: 5,),
             passwordTextFormField(),
             const SizedBox(height: 5,),
-            conformTextFormField(),
+            confirmTextFormField(),
             const SizedBox(height: 5,),
             SizedBox(
               height: 50,
@@ -42,6 +63,19 @@ class _AccountDetailState extends State<AccountDetail> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 color: Colors.green,
                 child: const Text("Save", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),),),
+            ),
+            SizedBox(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: IconButton(
+                onPressed: () {
+                  SharedService.logout(context);
+                },
+                icon: const Icon(
+                Icons.logout,
+                color: Colors.black,
+                ),
+              ),
             )
           ],
         ),
@@ -51,7 +85,7 @@ class _AccountDetailState extends State<AccountDetail> {
 
   TextFormField nameTextFormField() {
     return TextFormField(
-      controller: email,
+      controller: name,
       decoration: const InputDecoration(
           border: OutlineInputBorder(),
           hintText: "Enter your name",
@@ -65,7 +99,7 @@ class _AccountDetailState extends State<AccountDetail> {
 
   TextFormField addressTextFormField() {
     return TextFormField(
-      controller: email,
+      controller: address,
       decoration: const InputDecoration(
           border: OutlineInputBorder(),
           hintText: "Enter your address ",
@@ -79,7 +113,7 @@ class _AccountDetailState extends State<AccountDetail> {
 
   TextFormField phoneTextFormField() {
     return TextFormField(
-      controller: email,
+      controller: phone,
       decoration: const InputDecoration(
           border: OutlineInputBorder(),
           hintText: "Enter your phone ",
@@ -105,7 +139,7 @@ class _AccountDetailState extends State<AccountDetail> {
     );
   }
 
-  TextFormField conformTextFormField() {
+  TextFormField confirmTextFormField() {
     return TextFormField(
       decoration: const InputDecoration(
           border: OutlineInputBorder(),

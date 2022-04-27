@@ -11,7 +11,7 @@ class ProductPopular extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var productsAPI = Utilities().getProducts();
+    // var productsAPI = Utilities().getProducts();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
