@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'package:app_shopping/config.dart';
+import 'package:app_shopping/model/categories.dart';
+import 'package:app_shopping/model/products.dart';
 import 'package:app_shopping/model/register_request_model.dart';
 import 'package:app_shopping/model/register_response_model.dart';
 import 'package:app_shopping/model/user_view_model.dart';
 import 'package:app_shopping/services/shared_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../model/login_request_model.dart';
@@ -86,5 +89,85 @@ class APIService {
     );
 
     return registerResponseModel(response.body);
+  }
+ 
+  // static Future getAllCategory() async {
+  //   Map<String, String> requestHeaders = {
+  //     'Content-Type': 'application/json'
+  //   };
+  //   // var url = Uri.https(Config.apiURL, Config.categoryAPI);
+
+  //   // var response = await client.get(
+  //   //   url, 
+  //   //   headers: requestHeaders,
+  //   // );
+  //   // if (response.statusCode == 200) {
+  //   //   return Categories.fromJson(json.decode(response.body));
+  //   // }
+  //   // else {
+  //   //   throw Exception("Failed to load cate api");
+  //   // }
+
+  //   var url = Uri.https(Config.apiURL, Config.categoryAPI);
+  //   var response = await http.get(url, headers: requestHeaders);
+  //   if (response.statusCode == 200)  {
+  //     return json.decode(response.body)["data"];
+  //   } else {
+  //     throw Exception("Failed to load cate api");
+  //   }
+  // }
+
+  // static Future getAllCategory() async {
+  //   Map<String, String> requestHeaders = {
+  //     'Content-Type': 'application/json'
+  //   };
+  //   var url = Uri.https(Config.apiURL, Config.categoryAPI);
+
+  //   var response = await client.get(
+  //     url, 
+  //     headers: requestHeaders,
+  //   );
+  //   if (response.statusCode == 200) {
+  //     return Categories.fromJson(json.decode(response.body));
+  //   }
+  //   else {
+  //     throw Exception("Failed to load cate api");
+  //   }
+  // }
+
+  static Future<List<Categories>?> getAllCategory() async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json'
+    };
+    var url = Uri.https(Config.apiURL, Config.categoryAPI);
+
+    var response = await client.get(
+      url, 
+      headers: requestHeaders,
+    );
+    if (response.statusCode == 200) {
+      return categoriesFromJson(response.body);
+    }
+    else {
+      throw Exception("Failed to load cate api");
+    }
+  }
+
+  static Future<List<Products>?> getAllProduct() async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json'
+    };
+    var url = Uri.https(Config.apiURL, Config.productAPI);
+
+    var response = await client.get(
+      url, 
+      headers: requestHeaders,
+    );
+    if (response.statusCode == 200) {
+      return productsFromJson(response.body);
+    }
+    else {
+      throw Exception("Failed to load cate api");
+    }
   }
 }

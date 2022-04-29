@@ -197,10 +197,7 @@ class _SignUpFormState extends State<SignUpForm> {
               "phone", 
               "Số điện thoại", 
               (onValidateVal) {
-                if(onValidateVal.isEmpty) {
-                  return "Số điện thoại không được để trống";
-                }
-                return null;
+                return Utilities.validatePhoneNumber(onValidateVal);
               }, 
               (onSavedVal) {
                 phone = onSavedVal; 

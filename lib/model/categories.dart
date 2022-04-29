@@ -1,20 +1,29 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class Categories{
-  int id;
-  String title;
-  String image;
-  int cateID;
-  Categories({required this.id, required this.title, required this.image, required this.cateID});
+List<Categories> categoriesFromJson(String str) => List<Categories>.from(json.decode(str).map((x) => Categories.fromJson(x)));
 
-  static List<Categories> init(){
-    List<Categories> data= [
-      Categories(id:1, title: "HighLand", image: "assets/images/ic_highland.jpeg", cateID: 1 ),
-      Categories(id:2, title: "HighLand", image: "assets/images/ic_circlek.png", cateID: 2 ),
-      Categories(id:3, title: "HighLand", image: "assets/images/ic_ministop.png", cateID: 3 ),
-      Categories(id:4, title: "HighLand", image: "assets/images/ic_seveneleven.png", cateID: 4 ),
-      Categories(id:5, title: "HighLand", image: "assets/images/ic_vinmart.jpg", cateID: 5 ),
-    ];
-    return data;
-  }
+String categoriesToJson(List<Categories> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class Categories {
+    Categories({
+        required this.id,
+        required this.name,
+        this.imageCate,
+    });
+
+    int id;
+    String name;
+    String? imageCate;
+
+    factory Categories.fromJson(Map<String, dynamic> json) => Categories(
+        id: json["id"],
+        name: json["name"],
+        imageCate: json["imageCate"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "imageCate": imageCate,
+    };
 }

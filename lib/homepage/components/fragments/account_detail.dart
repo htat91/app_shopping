@@ -35,8 +35,8 @@ class _AccountDetailState extends State<AccountDetail> {
   }
   @override
   Widget build(BuildContext context) {
-    return Form(
-      child: Padding(
+    return Expanded(
+      child: SingleChildScrollView(child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
@@ -80,6 +80,7 @@ class _AccountDetailState extends State<AccountDetail> {
           ],
         ),
       ),
+    ),
     );
   }
 

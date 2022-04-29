@@ -46,7 +46,7 @@ class ProductItemList extends StatelessWidget {
             SizedBox(
               width: 100,
               height: 100,
-              child: Image.asset(product.image, fit: BoxFit.fill,),
+              child: Image.asset(product.image!, fit: BoxFit.fill,),
             ),
             SizedBox(width: 5,),
             Expanded(
