@@ -1,13 +1,14 @@
+import 'package:app_shopping/model/items.dart';
+
 import 'products.dart';
 
 class Cart {
-  static List<Products> cart = [];
-  void addProductToCart(Products product){
-    cart.add(product);
+  static List<Items> cart = [];
+  void addProductToCart(Items item){
+    cart.add(item);
   }
 
-  List<Products> getCart(){
+  List<Items> getCart(){
     return cart;
   }
-
 }

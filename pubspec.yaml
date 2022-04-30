@@ -40,6 +40,9 @@ dependencies:
   api_cache_manager: ^1.0.2
   snippet_coder_utils: ^1.0.9
   flutter_riverpod: any
+  fluttertoast: ^8.0.9
+  quantity_input: ^1.0.2
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

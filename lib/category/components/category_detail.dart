@@ -1,5 +1,9 @@
+import 'package:app_shopping/detail/productpage.dart';
+import 'package:app_shopping/model/categories.dart';
 import 'package:app_shopping/services/api_service.dart';
+import 'package:app_shopping/services/state_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../model/products.dart';
 import '../../model/utilities.dart';
@@ -13,31 +17,31 @@ class CategoryDetail extends StatefulWidget {
 }
 
 class _CategoryDetailState extends State<CategoryDetail> {
-  List<Products>? products;
-  bool isLoading = false;
-  @override
-  void initState() {
-    super.initState();
-    fetchData();
-  }
+  // List<Products>? products;
+  // bool isLoading = false;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   fetchData();
+  // }
 
-  fetchData() async {    
-    setState(() {
-      isLoading = true;
-    });
-    var item = await APIService.getAllProduct();
-    if (item != null)  {     
-      setState(() {
-        isLoading = false;
-        products = item;
-      });
-    } else {
-      setState(() {
-        isLoading = false;
-        products = [];
-      });
-    }
-  }
+  // fetchData() async {    
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   var item = await APIService.getAllProduct();
+  //   if (item != null)  {     
+  //     setState(() {
+  //       isLoading = false;
+  //       products = item;
+  //     });
+  //   } else {
+  //     setState(() {
+  //       isLoading = false;
+  //       products = [];
+  //     });
+  //   }
+  // }
 
   // List<Products> getProductFromCate(int id) {
   //   return products!.where((p) => p.categoryId == id).toList();
@@ -45,25 +49,43 @@ class _CategoryDetailState extends State<CategoryDetail> {
 
   @override
   Widget build(BuildContext context) {
-    if (products == null || isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    return buildListView(products!.where((p) => p.categoryId == widget.id).toList());
+    // if (products == null || isLoading) {
+    //   return const Center(child: CircularProgressIndicator());
+    // }
+    return getBuildListView(widget.id);
   }
-  ListView buildListView(List<Products> data) {
-  print(data.toString());
-  return ListView.builder( 
-    itemCount: data.length,
-    itemBuilder: (context, index){
-      return ListTile(
-        // leading: data[index].id != null ? Image.network('${Utilities.host}${data[index].image}'),
-        leading: Image.asset(data[index].image!),
-        title: Text(data[index].title),
-        trailing: Text(data[index].price.toString()),
-        onTap: () {
-          // Navigator.pushNamed(context, ProductPage.routeName, arguments: ProductDetailsArguments(product: data[index]));
-        });
-    },
-  );
 }
+
+class getBuildListView extends ConsumerWidget {
+  int id;
+  getBuildListView(this.id, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    AsyncValue<List<Products>?> products = ref.watch(productStateFuture);
+    return products.when(
+      loading: () => Center(child: CircularProgressIndicator()),
+      error: (err, stack) => Center(child: Text('${err.toString()}')),
+      data: (products) {
+        return buildListView(products!.where((p) => p.categoryId == id).toList());
+      }
+    );
+  }
+
+  ListView buildListView(List<Products> data) {
+    print(data.toString());
+    return ListView.builder( 
+      itemCount: data.length,
+      itemBuilder: (context, index){
+        return ListTile(
+          // leading: data[index].id != null ? Image.network('${Utilities.host}${data[index].image}'),
+          leading: Image.asset(data[index].image!),
+          title: Text(data[index].title),
+          trailing: Text(data[index].price.toString()),
+          onTap: () {
+            Navigator.pushNamed(context, ProductPage.routeName, arguments: ProductDetailsArguments(product: data[index]));
+          });
+      },
+    );
+  }
 }

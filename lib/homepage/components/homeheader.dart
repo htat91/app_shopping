@@ -1,3 +1,4 @@
+import 'package:app_shopping/cart/cartpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -20,7 +21,7 @@ class HomeHeader extends StatelessWidget {
         ),
         GestureDetector(
           onTap: (){
-            // Navigator.pushNamed(context, CartPage.routeName);
+            Navigator.pushNamed(context, CartPage.routeName);
           },
           child: Container(
               height: 40,

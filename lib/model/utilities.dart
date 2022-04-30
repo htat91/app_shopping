@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:app_shopping/model/products.dart';
 import 'package:http/http.dart' as http ;
+import 'package:intl/intl.dart';
 import 'package:quiver/strings.dart';
 
 class Utilities {
@@ -62,4 +63,10 @@ class Utilities {
   // List<Products> getProductFromCate(int id) {
   //   return Products.init().where((p) => p.cateID == id).toList();
   // }
+
+  static String getCurrency() {
+    Intl.defaultLocale = 'vi_VN';
+    var format = NumberFormat.simpleCurrency(locale: Intl.defaultLocale);
+    return format.currencySymbol;
+  }
 }

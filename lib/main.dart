@@ -5,6 +5,7 @@ import 'package:app_shopping/model/routes.dart';
 import 'package:app_shopping/services/shared_service.dart';
 import 'package:app_shopping/signin/signinpage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'homepage/homepage.dart';
 
@@ -16,7 +17,7 @@ void main() async {
     _defaultHome = HomePage();
   }
   HttpOverrides.global = MyHttpOverrides();
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

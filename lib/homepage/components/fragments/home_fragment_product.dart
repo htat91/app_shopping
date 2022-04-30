@@ -1,3 +1,4 @@
+import 'package:app_shopping/detail/productpage.dart';
 import 'package:app_shopping/model/products.dart';
 import 'package:app_shopping/model/utilities.dart';
 import 'package:app_shopping/services/api_service.dart';
@@ -110,8 +111,8 @@ class ProductItem extends StatelessWidget {
           Utilities.data.add(product);
           Utilities.dataCheck.add(product.id);
         }
-        // Navigator.pushNamed(context, ProductPage.routeName,
-        // arguments: ProductDetailsArguments(product: product));
+        Navigator.pushNamed(context, ProductPage.routeName,
+        arguments: ProductDetailsArguments(product: product));
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

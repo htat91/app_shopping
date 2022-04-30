@@ -1,3 +1,5 @@
+import 'package:app_shopping/cart/cartpage.dart';
+import 'package:app_shopping/detail/productpage.dart';
 import 'package:app_shopping/homepage/homepage.dart';
 import 'package:app_shopping/signin/signinpage.dart';
 import 'package:app_shopping/signup/signuppage.dart';
@@ -11,6 +13,6 @@ final Map<String, WidgetBuilder> routes = {
   SignUpPage.routeName : (context) => const SignUpPage(),
   HomePage.routeName : (context) => HomePage(),
   CategoryPage.routeName:(context)=> const CategoryPage(),
-  // ProductPage.routeName : (context) => ProductPage(),
-  // CartPage.routeName: (context) => CartPage(),
+  ProductPage.routeName : (context) => ProductPage(),
+  CartPage.routeName: (context) => CartPage(),
 };

@@ -6,6 +6,7 @@ import 'package:app_shopping/signup/signuppage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
@@ -27,6 +28,14 @@ class _SignInFormState extends State<SignInForm> {
   GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   String? username;
   String? password;
+  late FToast fToast;
+
+  @override
+  void initState() {
+    super.initState();
+    fToast = FToast();
+    fToast.init(context);
+  }
 
   @override
   Widget build(BuildContext context) {
