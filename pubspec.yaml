@@ -39,6 +39,7 @@ dependencies:
   http: ^0.13.4
   api_cache_manager: ^1.0.2
   snippet_coder_utils: ^1.0.9
+  flutter_riverpod: any
 
 dev_dependencies:
   flutter_test:

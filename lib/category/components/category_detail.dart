@@ -58,7 +58,7 @@ class _CategoryDetailState extends State<CategoryDetail> {
       return ListTile(
         // leading: data[index].id != null ? Image.network('${Utilities.host}${data[index].image}'),
         leading: Image.asset(data[index].image!),
-        title: Text(data[index].title!),
+        title: Text(data[index].title),
         trailing: Text(data[index].price.toString()),
         onTap: () {
           // Navigator.pushNamed(context, ProductPage.routeName, arguments: ProductDetailsArguments(product: data[index]));

@@ -1,8 +1,10 @@
 import 'package:app_shopping/model/products.dart';
 import 'package:app_shopping/model/utilities.dart';
 import 'package:app_shopping/services/api_service.dart';
+import 'package:app_shopping/services/state_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 
@@ -12,54 +14,54 @@ class ProductPopular extends StatefulWidget {
 }
 
 class _ProductPopular extends State<ProductPopular> {
-  List<Products>? products;
-  bool isLoading = false;
-  @override
-  void initState() {
-    super.initState();
-    fetchData();
-  }
+  // List<Products>? products;
+  // bool isLoading = false;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   fetchData();
+  // }
 
-  fetchData() async {    
-    setState(() {
-      isLoading = true;
-    });
-    var item = await APIService.getAllProduct();
-    if (item != null)  {     
-      setState(() {
-        products = item;
-        isLoading = false;
-      });
-    } else {
-      setState(() {
-        products = [];
-        isLoading = false;
-      });
-    }
-  }
+  // fetchData() async {    
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   var item = await APIService.getAllProduct();
+  //   if (item != null)  {     
+  //     setState(() {
+  //       products = item;
+  //       isLoading = false;
+  //     });
+  //   } else {
+  //     setState(() {
+  //       products = [];
+  //       isLoading = false;
+  //     });
+  //   }
+  // }
 
-  Widget getBody() {
-    if (products == null || isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    return GridView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  primary: false,
-                  itemCount: products!.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
-                      childAspectRatio: 0.7
+  // Widget getBody() {
+  //   if (products == null || isLoading) {
+  //     return const Center(child: CircularProgressIndicator());
+  //   }
+  //   return GridView.builder(
+  //                 scrollDirection: Axis.vertical,
+  //                 shrinkWrap: true,
+  //                 primary: false,
+  //                 itemCount: products!.length,
+  //                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+  //                     crossAxisCount: 3,
+  //                     mainAxisSpacing: 10,
+  //                     crossAxisSpacing: 10,
+  //                     childAspectRatio: 0.7
 
-                  ),
-                  itemBuilder: (context, index) {
-                    return ProductItem(
-                      product: products![index],
-                    );
-                  });
-  }
+  //                 ),
+  //                 itemBuilder: (context, index) {
+  //                   return ProductItem(
+  //                     product: products![index],
+  //                   );
+  //                 });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +83,7 @@ class _ProductPopular extends State<ProductPopular> {
           ),
           SizedBox(height: 10,),
           Container(
-              child: getBody(),
+              child: GetBodyProduct(),
           ),
 
         ],
@@ -134,4 +136,34 @@ class ProductItem extends StatelessWidget {
       ),
     );
   }
+}
+
+class GetBodyProduct extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    AsyncValue<List<Products>?> products = ref.watch(productStateFuture);
+    return products.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => Center(child: Text('${err.toString()}')),
+      data: (products) {
+        return GridView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          primary: false,
+          itemCount: products!.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            childAspectRatio: 0.7
+          ),
+          itemBuilder: (context, index) {
+            return ProductItem(
+              product: products[index],
+            );
+          });
+      }
+    );
+  }
+
 }
